@@ -1,4 +1,6 @@
 #include "firstRead.h"
+#include "assembler.h"
+
 
 int firstRead(commandStringNode* CommandListHead){
 	/*Create the Struct for the firstRead and give default parameters*/

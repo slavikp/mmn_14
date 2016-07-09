@@ -36,13 +36,6 @@ int main(int argc, char *argv[]) {
 			printf("[Main][Info]: Starting building linked list of %s file\n",argv[i]);
 			CommandListHead = decodingFile("myprog.as");
 			printLineLinkList(CommandListHead);
-			printf("shalom");
-
-
-
-
-
-
 			printf("[Main][Info]: Starting first read of %s file\n",argv[i]);
 			firstRead(CommandListHead);
 			printf("[Main][Info]: Starting second read of %s file\n",argv[i]);

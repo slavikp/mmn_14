@@ -6,17 +6,20 @@
 C_SRCS += \
 ../src/fileManager.c \
 ../src/firstRead.c \
-../src/mmn_14.c 
+../src/mmn_14.c \
+../src/secondRead.c 
 
 OBJS += \
 ./src/fileManager.o \
 ./src/firstRead.o \
-./src/mmn_14.o 
+./src/mmn_14.o \
+./src/secondRead.o 
 
 C_DEPS += \
 ./src/fileManager.d \
 ./src/firstRead.d \
-./src/mmn_14.d 
+./src/mmn_14.d \
+./src/secondRead.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
