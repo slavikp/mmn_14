@@ -3,7 +3,6 @@
  Name        : assembler.h
  Author      : Slavik Pashanin
  Version     :
-
  Description : General header file for the assembly.
 		       Contains Constant, macros, data structures and methods declaration.
  ====================================================================================
@@ -38,7 +37,7 @@
 
 /* Defining Constants */
 #define MAX_LINES_NUM		700
-#define MAX_LABELS_NUM		MAX_LINES_NUM
+#define MAX_LABELS_NUM		0
 
 typedef  struct {
 	unsigned int ERA 	:2;
@@ -83,7 +82,7 @@ typedef struct symbolsListNode{
 #define STRING_COMMENT  ";"
 #define STRING_LABEL    ":"
 /*Guidance Statements*/
-#define STRSTRING ".string"
+#define STR_STRING      ".string"
 #define STRDATA ".data"
 #define STRENTRY ".entry"
 #define STREXTERN ".extern"

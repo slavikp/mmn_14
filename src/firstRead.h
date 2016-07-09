@@ -1,9 +1,12 @@
 /*
- * firstRead.h
- *
- *  Created on: Jul 7, 2016
- *      Author: student
+ ====================================================================================
+ Name        : assembler.h
+ Author      : Slavik Pashanin
+ Version     :
+ Description : [complete]
+ ====================================================================================
  */
+
 
 #ifndef FIRSTREAD_H_
 #define FIRSTREAD_H_
@@ -22,6 +25,11 @@ Data* convertCharToUnsignedInt(char Char);
 Data* convertIntCharToUnsignedInt(char * Char);
 int CheckIfWeHaveTwoOperators(CommandItemNode * ItemNode);
 int CheckIfWeHaveOneOperators(CommandItemNode * ItemNode);
+int CheckIfSourceAddressingOk(char * str, char * action);
+int CheckIfDestenationAddressingOk(char * str, char * action);
+int IfBothParamRegister(CommandItemNode * ItemNodeS, CommandItemNode * ItemNodeD);
+void updateICandLabelFromAction(firstReadStruct * firstTranstion, symbolsListNode *Lable, int rows);
+ADDERSSING ChooseAddressType(char * str);
 
 
 

@@ -1,3 +1,13 @@
+/*
+ ============================================================================
+ Name        : firstRead.c
+ Author      : Slavik Pashanin
+ Version     :
+ Copyright   : Slavik_pashanin
+ Description : [complete]
+ ============================================================================
+ */
+
 #include "firstRead.h"
 #include "assembler.h"
 
@@ -9,7 +19,7 @@ int firstRead(commandStringNode* CommandListHead){
 	firstRun-> IC = FIRST_ADDRESS;
 	firstRun-> symbolHead = NULL;
 
-	/*Starting the first read on lines*/
+	/*Starting the first read of lines*/
 
 	commandStringNode* CommandListNodeTemp = CommandListHead;
 	while(CommandListNodeTemp != NULL) {
@@ -17,6 +27,7 @@ int firstRead(commandStringNode* CommandListHead){
 		int result = updateFirstReadStruct(firstRun, (CommandItemNode *)CommandListNodeTemp-> head);
 		/*if the command line was with error remove line*/
 		if(result == EXIT_FAILURE) {
+			printf("[first-read][INFO]Line was removed");
 			/*remove command line form list - we don't want to run on this line in second transition*/
 			commandStringNode * failNext = (commandStringNode *)CommandListNodeTemp-> next;
 			CommandListNodeTemp = (commandStringNode *)CommandListNodeTemp-> prev;
@@ -49,7 +60,7 @@ int updateFirstReadStruct(firstReadStruct * firstRead, CommandItemNode * ItemHea
 	}
 	/*label Statements*/
 	if((ItemHead -> str)[strlen(ItemHead -> str)-1] == STRING_LABEL[0]) {
-		printf("[First-Read][Info] Add Label %s\n", ItemHead -> str);
+		printf("[First-Read][Info] Add Label: %s\n", ItemHead -> str);
 		/*if label length bigger then 30 char*/
 		if(strlen(ItemHead -> str) > MAX_LABEL_LENGTH ){
 			printf("[First-Read][Error]label length is bigger than 30 chars.\n");
@@ -90,7 +101,7 @@ int RunFirstReadAction(firstReadStruct * firstRead, CommandItemNode * ItemHead, 
 	/*run an all action - check for error in actions and if not error update the IC counter,*/
 	/*in data, string, extern, entry insert if we need to lists (if we need)*/
 
-	if((strcmp(ItemHead-> str, STRSTRING)) == 0) {
+	if((strcmp(ItemHead-> str, STR_STRING)) == 0) {
 		if(ItemHead-> next == NULL)
 		{
 			printf("[First-Read][Error] %s not getting string\n",ItemHead-> str);
@@ -342,6 +353,7 @@ int isRegisterString(char*str) {
 	}
 	return EXIT_FAILURE;
 }
+
 Data* convertCharToUnsignedInt(char Char){
 	/*cast and get the Ascii table code*/
 	Data* instruction = (Data*)malloc(sizeof(Data));
@@ -368,4 +380,78 @@ Data* convertIntCharToUnsignedInt(char * Char){
 	return instruction;
 }
 
+int CheckIfSourceAddressingOk(char * str, char * action){
+	/*check if the source address not correct*/
+	if(strcmp(action, STRLEA)== 0){
+		ADDERSSING ad = ChooseAddressType(str);
+		if(ad == IMMEDIATEADDERSSING || ad  == DIRECTREGISTERADDERSSING||
+				ad == RANDOMADDERSSING2 || ad == RANDOMADDERSSING1){
+			printf("error wrong parameter source - %s : %s", action, str);
+			return EXIT_FAILURE;
+		}
+	}
+	return EXIT_SUCCESS;
+}
 
+int CheckIfDestenationAddressingOk(char * str, char * action){
+	/*check if the destination address not correct*/
+	ADDERSSING ad = ChooseAddressType(str);
+	if(strcmp(action, STRMOV)== 0 ||
+			strcmp(action, STRADD)== 0 ||
+			strcmp(action, STRSUB)== 0 ||
+			strcmp(action, STRNOT)== 0 ||
+			strcmp(action, STRCLR)== 0 ||
+			strcmp(action, STRLEA)== 0 ||
+			strcmp(action, STRINC)== 0 ||
+			strcmp(action, STRDEC)== 0||
+			strcmp(action, STRJMP)== 0 ||
+			strcmp(action, STRBNE)== 0 ||
+			strcmp(action, STRRED)== 0 ||
+			strcmp(action, STRJSR)== 0 ){
+		if(ad == IMMEDIATEADDERSSING || ad  == RANDOMADDERSSING1||
+				ad == RANDOMADDERSSING2 || ad == RANDOMADDERSSING3 ){
+			printf("error wrong parameter source - %s : %s", action, str);
+			return EXIT_FAILURE;
+		}
+	}
+
+	if(strcmp(action, STRCMP)== 0 ||
+			strcmp(action, STRPRN)== 0 ){
+		if(ad  == RANDOMADDERSSING1|| ad == RANDOMADDERSSING2 || ad == RANDOMADDERSSING3 ){
+			printf("error wrong parameter source - %s : %s", action, str);
+			return EXIT_FAILURE;
+		}
+	}
+	return EXIT_SUCCESS;
+}
+
+int IfBothParamRegister(CommandItemNode * ItemNodeS, CommandItemNode * ItemNodeD){
+	if( IsRegisterString(ItemNodeS->str)==0 && IsRegisterString(ItemNodeD->str)==0 )
+		return 0;
+	return 1;
+}
+
+void updateICandLabelFromAction(firstReadStruct * firstTranstion,  symbolsListNode *Lable, int rows){
+	/*in first transition update the counter of transitions IC*/
+	/*if we have label to the row we update that we in action line and update the address of action index*/
+	if(Lable != NULL){
+		Lable->Address = firstTranstion->IC;
+		Lable->Action = 1;
+	}
+	firstTranstion->IC = firstTranstion->IC + rows;
+}
+
+ADDERSSING ChooseAddressType(char * str){
+	if(strncmp(str, "#" ,1) == 0){
+		return IMMEDIATEADDERSSING;
+	}else if(strcmp(str, "***" ) == 0){
+		return RANDOMADDERSSING3;
+	}else if(strcmp(str, "**" ) == 0){
+		return RANDOMADDERSSING2;
+	}else if(strcmp(str, "*" ) == 0){
+		return RANDOMADDERSSING1;
+	}else if(IsRegisterString(str) == 0){
+		return DIRECTREGISTERADDERSSING;
+	}
+	return DIRECTADDERSSING;
+}

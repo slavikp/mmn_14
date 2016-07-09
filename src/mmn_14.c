@@ -3,14 +3,18 @@
  Name        : main.c
  Author      : Slavik Pashanin
  Version     :
- Copyright   : slavik_pashanin
- Description :
+ Copyright   : Slavik_pashanin
+ Description : The purpose of this program is to create an assembler program
+ 	 	 	   The program getting *.as file "translte it to linked list
+ 	 	 	   by first and second read of file.
  ============================================================================
  */
 
 #include "assembler.h"
 #include "fileManager.h"
 #include "firstRead.h"
+//#include "secondRead.h"
+
 
 
 int main(int argc, char *argv[]) {
@@ -23,7 +27,7 @@ int main(int argc, char *argv[]) {
 		if (argc < 2)
 		{
 			printf("[Main][Error] No file was detected.\n");
-			return 0;
+			return FALSE;
 		}
 
 		for (i = 1; i < argc; i++)
