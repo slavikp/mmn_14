@@ -1,0 +1,5 @@
+src/firstRead.d: ../src/firstRead.c ../src/firstRead.h ../src/assembler.h
+
+../src/firstRead.h:
+
+../src/assembler.h:
