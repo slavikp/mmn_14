@@ -8,7 +8,10 @@
 #ifndef SECONDREAD_H_
 #define SECONDREAD_H_
 
-secondReadStruct* ConvertFirstReadToSecondRead(firstReadStruct* firstRead);
+#include "firstRead.h"
+#include "assembler.h"
+
+secondReadStruct * ConvertFirstReadToSecondRead(firstReadStruct* firstRead);
 int runSecondRead(commandStringNode* CommandListHead,secondReadStruct * secondTranstion);
 int UpdateSecondReadStruct(secondReadStruct * secondTranstion, CommandItemNode * ItemHead);
 void RunSecondReadAction(secondReadStruct * secondTranstion, CommandItemNode * ItemHead, symbolsListNode *Lable);

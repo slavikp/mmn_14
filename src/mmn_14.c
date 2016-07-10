@@ -13,20 +13,18 @@
 #include "assembler.h"
 #include "fileManager.h"
 #include "firstRead.h"
-//#include "secondRead.h"
+#include "secondRead.h"
 
 
 
 int main(int argc, char *argv[]) {
 
-
-	{
 		//char inputFile[FILENAME_MAX];
 		int i;
 
 		if (argc < 2)
 		{
-			printf("[Main][Error] No file was detected.\n");
+			printf("[Error] No file was detected.\n");
 			return FALSE;
 		}
 
@@ -37,18 +35,25 @@ int main(int argc, char *argv[]) {
 		//	strcpy(inputFile,argv[i]);
 		//	strcat(inputFile,".as");
 			commandStringNode * CommandListHead;
-			printf("[Main][Info]: Starting building linked list of %s file\n",argv[i]);
+			printf("[Info]: Starting building linked list of %s file\n",argv[i]);
 			CommandListHead = decodingFile("myprog.as");
 			printLineLinkList(CommandListHead);
-			printf("[Main][Info]: Starting first read of %s file\n",argv[i]);
-			firstRead(CommandListHead);
-			printf("[Main][Info]: Starting second read of %s file\n",argv[i]);
+			printf("\n\n");
+			printf("[Info]: Starting first read of %s file\n",argv[i]);
+			/*create the struct for the first transition and give defaults*/
+			firstReadStruct * firstRead = (firstReadStruct *)malloc(sizeof(firstReadStruct));
+			firstRead->DC = 0;
+			firstRead->IC = 100;
+			firstRead->symbolHead = NULL;
+			runFirstRead(CommandListHead,firstRead);
+			printf("[Info]: Starting second read of %s file\n",argv[i]);
+			secondReadStruct* secondRead = ConvertFirstReadToSecondRead(firstRead);
+			free(firstRead);
 
-		//	printf("[Main][Info]: Starting building files\n");
+		//	printf("[Info]: Starting building files\n");
 
-		//	printf("[Main][Info]: Running fineshed!\n");
+		//	printf("[Info]: Running fineshed!\n");
 
 		}
 		return 0;
-	}
 }
