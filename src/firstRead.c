@@ -10,70 +10,61 @@
 
 #include "firstRead.h"
 #include "assembler.h"
+#include "fileManager.h"
 
-
-int firstRead(commandStringNode* CommandListHead){
-	/*Create the Struct for the firstRead and give default parameters*/
-	firstReadStruct * firstRun = (firstReadStruct *)malloc(sizeof(firstReadStruct));
-	firstRun-> DC = 0;
-	firstRun-> IC = FIRST_ADDRESS;
-	firstRun-> symbolHead = NULL;
-
-	/*Starting the first read of lines*/
-
-	commandStringNode* CommandListNodeTemp = CommandListHead;
-	while(CommandListNodeTemp != NULL) {
+/*first transition function*/
+int runFirstRead(commandStringNode* CommandListHead,firstReadStruct * firstRead){
+	commandStringNode* CommandListNodeTmp = CommandListHead;
+	while(CommandListNodeTmp != NULL){
 		/*update the sturct with symbols, data , transitions and counters*/
-		int result = updateFirstReadStruct(firstRun, (CommandItemNode *)CommandListNodeTemp-> head);
+		int result = UpdateFirstReadStruct(firstRead, (CommandItemNode *)CommandListNodeTmp->head);
 		/*if the command line was with error remove line*/
-		if(result == EXIT_FAILURE) {
-			printf("[first-read][INFO]Line was removed");
+		if(result == EXIT_FAILURE){
 			/*remove command line form list - we don't want to run on this line in second transition*/
-			commandStringNode * failNext = (commandStringNode *)CommandListNodeTemp-> next;
-			CommandListNodeTemp = (commandStringNode *)CommandListNodeTemp-> prev;
-			if(CommandListNodeTemp != NULL){
-				CommandListNodeTemp->next = failNext;
-				failNext->prev = CommandListNodeTemp;
+			commandStringNode * failNext = (commandStringNode *)CommandListNodeTmp-> next;
+			CommandListNodeTmp = (commandStringNode *)CommandListNodeTmp-> prev;
+			if(CommandListNodeTmp != NULL){
+				CommandListNodeTmp->next = failNext;
+				failNext->prev = CommandListNodeTmp;
 				/*move to next line*/
-				CommandListNodeTemp = (commandStringNode*)CommandListNodeTemp->next;
-			}
-			else {
+				CommandListNodeTmp = (commandStringNode*)CommandListNodeTmp->next;
+			}else{
 				/*if we delete from root list*/
-				CommandListHead-> head = failNext-> head;
-				CommandListHead-> next = failNext-> next;
-				CommandListNodeTemp = failNext;
+				CommandListHead->head = failNext->head;
+				CommandListHead->next = failNext->next;
+				CommandListNodeTmp = failNext;
 			}
-		}
-		else {
+		}else{
 			/*move to next line*/
-			CommandListNodeTemp = (commandStringNode*)CommandListNodeTemp-> next;
+			CommandListNodeTmp = (commandStringNode*)CommandListNodeTmp->next;
 		}
 	}
 	return EXIT_SUCCESS;
 }
 
-int updateFirstReadStruct(firstReadStruct * firstRead, CommandItemNode * ItemHead){
+int UpdateFirstReadStruct(firstReadStruct * firstRead, CommandItemNode * ItemHead){
+
 	/*comment Statements*/
 	if(strncmp(ItemHead -> str, STRING_COMMENT ,1) == 0){
-		printf("[First-Read][Info] comment %s\n", ItemHead -> str);
+		printf("[info] comment%s\n", ItemHead -> str);
 		return EXIT_FAILURE;
 	}
 	/*label Statements*/
-	if((ItemHead -> str)[strlen(ItemHead -> str)-1] == STRING_LABEL[0]) {
-		printf("[First-Read][Info] Add Label: %s\n", ItemHead -> str);
+	if((ItemHead -> str)[strlen(ItemHead -> str)-1] ==  STRING_LABEL[0] ){
+		printf("log: FirstTransition : Add Label %s\n", ItemHead -> str);
 		/*if label length bigger then 30 char*/
-		if(strlen(ItemHead -> str) > MAX_LABEL_LENGTH ){
-			printf("[First-Read][Error]label length is bigger than 30 chars.\n");
+		if(strlen(ItemHead ->str) > MAX_LABEL_LENGTH ){
+			printf("error: First Transition : label length > 30\n");
 			return EXIT_FAILURE;
 		}
 		/*if is register label*/
-		if(IsRegisterString(ItemHead -> str) == 0) {
-			printf("[First-Read][Error] label have register name\n");
+		if(IsRegisterString(ItemHead -> str) == 0){
+			printf("error: First Transition : label have register name\n");
 			return EXIT_FAILURE;
 		}
-		/*create symbol node for symbols list and give default parameters*/
+		/*create symbol node for symbols list*/
 		symbolsListNode *Lable = (symbolsListNode *)malloc(sizeof(symbolsListNode));
-		Lable-> Label = ItemHead -> str;
+		Lable->Label = ItemHead -> str;
 		Lable->Address = 0;
 		Lable->Extract = 0;
 		Lable->Action = 0;
@@ -85,52 +76,50 @@ int updateFirstReadStruct(firstReadStruct * firstRead, CommandItemNode * ItemHea
 			/*insert to symbols list*/
 			AddSymbolToSymbolsList(firstRead, Lable);
 			return EXIT_SUCCESS;
-		}
-		else {
+		}else{
 			return EXIT_FAILURE;
 		}
 	}
+
 	/*Action Statements*/
 	return RunFirstReadAction(firstRead, ItemHead, NULL);
 }
 
-
 int RunFirstReadAction(firstReadStruct * firstRead, CommandItemNode * ItemHead, symbolsListNode *Lable){
-	printf("[First-Read][Info] action: %s\n", ItemHead -> str);
+	printf("log: FirstTransition : action: %s\n", ItemHead -> str);
 
 	/*run an all action - check for error in actions and if not error update the IC counter,*/
 	/*in data, string, extern, entry insert if we need to lists (if we need)*/
-
-	if((strcmp(ItemHead-> str, STR_STRING)) == 0) {
-		if(ItemHead-> next == NULL)
+	if((strcmp(ItemHead-> str, STR_STRING)) == 0){
+		if(ItemHead->next ==NULL)
 		{
-			printf("[First-Read][Error] %s not getting string\n",ItemHead-> str);
+			printf("error: %s not get string\n",ItemHead-> str);
 			return EXIT_FAILURE;
 		}
 		/*if we need to update symbols list*/
 		if(Lable != NULL)
-			Lable-> Address = firstRead-> DC;
+			Lable->Address = firstRead-> DC;
 		/* get string to save*/
-		char * String = ((CommandItemNode *)ItemHead-> next)-> str;
+		char * String= ((CommandItemNode *)ItemHead->next)-> str;
 		size_t StringLen = strlen(String);
 		int i = 1;
 		/*add data rows to struct*/
-		while(i < StringLen-1) {
+		while(i < StringLen-1){
 			AddRowToDataList(firstRead, convertCharToUnsignedInt(String[i]));
 			i++;
 		}
 		/*update the data list*/
 		Data* endStr = (Data*)malloc(sizeof(Data));
-		endStr-> bytes = 0;
+		endStr->bytes = 0;
 		AddRowToDataList(firstRead, endStr);
 		return EXIT_SUCCESS;
 
 	}else if(strcmp(ItemHead-> str, STRDATA)== 0){
 		/*get next data int*/
-		CommandItemNode *tmp =  (CommandItemNode *)ItemHead-> next;
+		CommandItemNode *tmp =  (CommandItemNode *)ItemHead->next;
 		/*if we have label before action and if we have one int or more*/
 		if(Lable != NULL && tmp !=NULL)
-			Lable-> Address = firstRead-> DC;
+			Lable->Address = firstRead->DC;
 		/*add all ints to data list*/
 		while(tmp != NULL){
 			AddRowToDataList(firstRead, convertIntCharToUnsignedInt(tmp-> str));
@@ -284,90 +273,74 @@ int RunFirstReadAction(firstReadStruct * firstRead, CommandItemNode * ItemHead, 
 		updateICandLabelFromAction(firstRead, Lable,1);
 	}
 
-	printf("[First-Read][Info] IC parameter is: %d\n", firstRead ->IC);
-	printf("[First-Read][Info] DC parameter is: %d\n",firstRead -> DC);
+	printf("log: FirstTransition : IC: %d\n", firstRead ->IC);
+	printf("log: FirstTransition : DC: %d\n", firstRead ->DC);
 
 	return EXIT_SUCCESS;
 }
 
 
+
+
+int IsRegisterString(char*str){
+	if(strncmp(str, "R" ,1) == 0){
+		switch(str[1]){
+		case '0':
+			return 0;
+		case '1':
+			return 0;
+		case '2':
+			return 0;
+		case '3':
+			return 0;
+		case '4':
+			return 0;
+		case '5':
+			return 0;
+		case '6':
+			return 0;
+		case '7':
+			return 0;
+		}
+	}
+	return 1;
+}
+
 void AddSymbolToSymbolsList(firstReadStruct * firstRead, symbolsListNode *symbol){
 	/*run on symbols link list and insert to the end of list the new symbol*/
-	if(firstRead -> symbolHead == NULL){
-		firstRead-> symbolHead = symbol;
+	if(firstRead->symbolHead == NULL){
+		firstRead->symbolHead = symbol;
 		return;
 	}
-	symbolsListNode* tmp =(symbolsListNode*)firstRead-> symbolHead;
+	symbolsListNode* tmp =(symbolsListNode*)firstRead->symbolHead;
 	while(tmp->next !=NULL){
-		tmp= (symbolsListNode*)tmp-> next;
+		tmp= (symbolsListNode*)tmp->next;
 	}
 	tmp->next = symbol;
 }
 
-void AddRowToDataList(firstReadStruct * firstTranstion, Data* data){
+void AddRowToDataList(firstReadStruct * firstRead, Data* data){
 	/*add .data, .string to data list and update counter DC*/
-	int DC = firstTranstion-> DC;
-	(firstTranstion-> DataList)[DC] = data;
-	firstTranstion-> DC = DC +1;
-}
-
-int CheckIfWeHaveTwoOperators(CommandItemNode * ItemNode) {
-	/*check if we have 2 param*/
-	if(ItemNode == NULL || ItemNode->next == NULL ){
-		printf("error not get 2 parameters - %s", ItemNode-> str);
-		return EXIT_FAILURE;
-	}
-
-	return EXIT_SUCCESS;
-}
-
-int CheckIfWeHaveOneOperators(CommandItemNode * ItemNode){
-	/*check if we get 1 param*/
-	if(ItemNode == NULL){
-		printf("error not get 1 parameters - %s", ItemNode->str);
-		return EXIT_FAILURE;
-	}
-	return EXIT_SUCCESS;
-}
-
-int isRegisterString(char*str) {
-	if(strncmp(str, "R" ,1) == 0){
-		switch(str[1]){
-		case '0':
-			return EXIT_SUCSSES;
-		case '1':
-			return EXIT_SUCSSES;
-		case '2':
-			return EXIT_SUCSSES;
-		case '3':
-			return EXIT_SUCSSES;
-		case '4':
-			return EXIT_SUCSSES;
-		case '5':
-			return EXIT_SUCSSES;
-		case '6':
-			return EXIT_SUCSSES;
-		case '7':
-			return EXIT_SUCSSES;
-		}
-	}
-	return EXIT_FAILURE;
+	int DC = firstRead->DC;
+	(firstRead->DataList)[DC] = data;
+	firstRead->DC = DC +1;
 }
 
 Data* convertCharToUnsignedInt(char Char){
-	/*cast and get the Ascii table code*/
+	/*cast and get the ascii code*/
 	Data* instruction = (Data*)malloc(sizeof(Data));
 	instruction->bytes = 0;
 	instruction->bytes = (unsigned int)Char;
 	return instruction;
 }
+
 Data* convertIntCharToUnsignedInt(char * Char){
 	int intChar=0;
 	int isNegative = 0;
 	Data* instruction = (Data*)malloc(sizeof(Data));
 	/*check if negative*/
 	char * neg = "-";
-	if(strncmp(Char,neg,1)==0 ) {
+	if(strncmp(Char,neg,1)==0 ){
 		isNegative = 1;
 		Char ++;
 	}
@@ -425,20 +398,39 @@ int CheckIfDestenationAddressingOk(char * str, char * action){
 	return EXIT_SUCCESS;
 }
 
+int CheckIfWeHaveTwoOperators(CommandItemNode * ItemNode){
+	/*check if we have 2 param*/
+	if(ItemNode == NULL || ItemNode->next == NULL ){
+		printf("error not get 2 parameters - %s", ItemNode-> str);
+		return EXIT_FAILURE;
+	}
+
+	return EXIT_SUCCESS;
+}
+
 int IfBothParamRegister(CommandItemNode * ItemNodeS, CommandItemNode * ItemNodeD){
 	if( IsRegisterString(ItemNodeS->str)==0 && IsRegisterString(ItemNodeD->str)==0 )
 		return 0;
 	return 1;
 }
 
-void updateICandLabelFromAction(firstReadStruct * firstTranstion,  symbolsListNode *Lable, int rows){
+void updateICandLabelFromAction(firstReadStruct * firstRead,  symbolsListNode *Lable, int rows){
 	/*in first transition update the counter of transitions IC*/
 	/*if we have label to the row we update that we in action line and update the address of action index*/
 	if(Lable != NULL){
-		Lable->Address = firstTranstion->IC;
+		Lable->Address = firstRead->IC;
 		Lable->Action = 1;
 	}
-	firstTranstion->IC = firstTranstion->IC + rows;
+	firstRead->IC = firstRead->IC + rows;
+}
+
+int CheckIfWeHaveOneOperators(CommandItemNode * ItemNode){
+	/*check if we get 1 param*/
+	if(ItemNode == NULL){
+		printf("error not get 1 parameters - %s", ItemNode-> str);
+		return EXIT_FAILURE;
+	}
+	return EXIT_SUCCESS;
 }
 
 ADDERSSING ChooseAddressType(char * str){

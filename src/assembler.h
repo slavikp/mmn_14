@@ -71,6 +71,14 @@ typedef struct firstReadStruct {
 	struct symbolsListNode *symbolHead;
 } firstReadStruct;
 
+typedef struct secondReadStruct{
+	unsigned int oldIC;
+	unsigned int oldDC;
+	unsigned int IC;
+	Data* InstructionsList[2000];
+	struct SymbolsListNode *SymbolesHead;
+} secondReadStruct;
+
 typedef struct symbolsListNode{
 	unsigned int Action;
 	unsigned int Extract;
@@ -105,7 +113,32 @@ typedef struct symbolsListNode{
 /*Action Statements -3*/
 #define STRRTS "rts"
 #define STRSTOP "stop"
+#define INPUTFILENAME "prog1.ob"
+#define EXTFILENAME "prog1.ext"
+#define ENTFILENAME "prog1.ent"
+
+/*Action Statements -1*/
+#define ACTIONMOV 0
+#define ACTIONCMP 1
+#define ACTIONADD 2
+#define ACTIONSUB 3
+#define ACTIONLEA 6
+/*Action Statements -2*/
+#define ACTIONNOT 4
+#define ACTIONCLR 5
+#define ACTIONINC 7
+#define ACTIONDEC 8
+#define ACTIONJMP 9
+#define ACTIONBNE 10
+#define ACTIONRED 11
+#define ACTIONPRN 12
+#define ACTIONJSR 13
+/*Action Statements -3*/
+#define ACTIONRTS 14
+#define ACTIONSTOP 15
 
 
+typedef enum {IMMEDIATEADDERSSING, DIRECTADDERSSING, RANDOMADDERSSING1,RANDOMADDERSSING2,RANDOMADDERSSING3, DIRECTREGISTERADDERSSING } ADDERSSING;
+typedef enum {REGISTER, LABLE, NUMBER}PARAMETERTYPE;
 
 #endif /* ASSEMBLER_H */

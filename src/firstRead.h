@@ -14,21 +14,20 @@
 
 #include "assembler.h"
 
-int firstRead(commandStringNode* CommandListHead);
-int updateFirstReadStruct(firstReadStruct * firstRead, CommandItemNode * ItemHead);
+int runFirstRead(commandStringNode* CommandListHead,firstReadStruct * firstRead);
+int UpdateFirstReadStruct(firstReadStruct * firstRead, CommandItemNode * ItemHead);
 int IsRegisterString(char*str);
-void AddSymbolToSymbolsList(firstReadStruct * firstTranstion, symbolsListNode *symbol);
-int RunFirstReadAction(firstReadStruct * firstTranstion, CommandItemNode * ItemHead, symbolsListNode *Lable);
-void AddRowToDataList(firstReadStruct * firstTranstion, Data* data);
-void AddSymbolToSymbolsList(firstReadStruct * firstTranstion, symbolsListNode *symbol);
+int RunFirstReadAction(firstReadStruct * firstRead, CommandItemNode * ItemHead, symbolsListNode *Lable);
+void AddSymbolToSymbolsList(firstReadStruct * firstRead, symbolsListNode *symbol);
+void AddRowToDataList(firstReadStruct * firstRead, Data* data);
 Data* convertCharToUnsignedInt(char Char);
 Data* convertIntCharToUnsignedInt(char * Char);
-int CheckIfWeHaveTwoOperators(CommandItemNode * ItemNode);
-int CheckIfWeHaveOneOperators(CommandItemNode * ItemNode);
 int CheckIfSourceAddressingOk(char * str, char * action);
 int CheckIfDestenationAddressingOk(char * str, char * action);
+int CheckIfWeHaveTwoOperators(CommandItemNode * ItemNode);
 int IfBothParamRegister(CommandItemNode * ItemNodeS, CommandItemNode * ItemNodeD);
-void updateICandLabelFromAction(firstReadStruct * firstTranstion, symbolsListNode *Lable, int rows);
+void updateICandLabelFromAction(firstReadStruct * firstRead,  symbolsListNode *Lable, int rows);
+int CheckIfWeHaveOneOperators(CommandItemNode * ItemNode);
 ADDERSSING ChooseAddressType(char * str);
 
 
