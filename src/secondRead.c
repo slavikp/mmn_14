@@ -1,4 +1,12 @@
-
+/*
+ ============================================================================
+ Name        : secondRead.c
+ Author      : Slavik Pashanin
+ Version     :
+ Copyright   : Slavik_pashanin
+ Description : [complete]
+ ============================================================================
+ */
 #include "secondRead.h"
 #include "fileManager.h"
 
@@ -16,7 +24,7 @@ secondReadStruct* ConvertFirstReadToSecondRead(firstReadStruct* firstRead){
 	for(i = secondRead->oldIC; j < firstRead->DC ; i++,j++){
 		secondRead->InstructionsList[i]= firstRead->DataList[j];
 		unsigned int n = ((Data*)firstRead->DataList[j])->bytes;
-		printf("Log: value of data with new index: index = %d , value = ",i);
+		printf("[Info] value of data with new index: index = %d , value = ",i);
 		while(n){
 			if(n & 1)
 				printf("1");
@@ -31,12 +39,12 @@ secondReadStruct* ConvertFirstReadToSecondRead(firstReadStruct* firstRead){
 	secondRead->SymbolesHead = firstRead->symbolHead;
 	symbolsListNode* tmpsymbol =(symbolsListNode *)secondRead->SymbolesHead;
 	while(tmpsymbol !=NULL){
-		printf("Log:before SymbolsListNode: Label = %s , address = %d, extract= %d, action= %d \n",tmpsymbol->Label,tmpsymbol->Address,tmpsymbol->Extract,tmpsymbol->Action);
+		printf("[Info] before SymbolsListNode: Label = %s , address = %d, extract= %d, action= %d \n",tmpsymbol->Label,tmpsymbol->Address,tmpsymbol->Extract,tmpsymbol->Action);
 		/*update the address*/
 		if(tmpsymbol->Extract == 0 && tmpsymbol->Action == 0){
 			tmpsymbol->Address =tmpsymbol->Address+ secondRead->oldIC;
 		}
-		printf("Log:after SymbolsListNode: Label = %s , address = %d, extract= %d, action= %d \n",tmpsymbol->Label,tmpsymbol->Address,tmpsymbol->Extract,tmpsymbol->Action);
+		printf("[Info] after  SymbolsListNode: Label = %s , address = %d, extract= %d, action= %d \n",tmpsymbol->Label,tmpsymbol->Address,tmpsymbol->Extract,tmpsymbol->Action);
 		tmpsymbol = (symbolsListNode *)tmpsymbol->next;
 	}
 	return secondRead;
@@ -75,7 +83,7 @@ int UpdateSecondReadStruct(secondReadStruct * secondRead, CommandItemNode * Item
 
 
 void RunSecondReadAction(secondReadStruct * secondRead, CommandItemNode * ItemHead, symbolsListNode *Lable){
-	printf("log: SecondTransition : action: %s\n", ItemHead ->str);
+	printf("[Info] action: %s\n", ItemHead ->str);
 	if((strcmp(ItemHead->str, STR_STRING)) == 0){
 		/*do nothing*/
 	}else if(strcmp(ItemHead->str, STRDATA)== 0){

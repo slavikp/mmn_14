@@ -51,15 +51,15 @@ int UpdateFirstReadStruct(firstReadStruct * firstRead, CommandItemNode * ItemHea
 	}
 	/*label Statements*/
 	if((ItemHead -> str)[strlen(ItemHead -> str)-1] ==  STRING_LABEL[0] ){
-		printf("log: FirstTransition : Add Label %s\n", ItemHead -> str);
+		printf("[Info] Add Label: %s\n", ItemHead -> str);
 		/*if label length bigger then 30 char*/
 		if(strlen(ItemHead ->str) > MAX_LABEL_LENGTH ){
-			printf("error: First Transition : label length > 30\n");
+			printf("[Error] label length bigger than 30\n");
 			return EXIT_FAILURE;
 		}
 		/*if is register label*/
 		if(IsRegisterString(ItemHead -> str) == 0){
-			printf("error: First Transition : label have register name\n");
+			printf("[Error] label have register name\n");
 			return EXIT_FAILURE;
 		}
 		/*create symbol node for symbols list*/
@@ -86,14 +86,14 @@ int UpdateFirstReadStruct(firstReadStruct * firstRead, CommandItemNode * ItemHea
 }
 
 int RunFirstReadAction(firstReadStruct * firstRead, CommandItemNode * ItemHead, symbolsListNode *Lable){
-	printf("log: FirstTransition : action: %s\n", ItemHead -> str);
+	printf("[Info] Action: %s\n", ItemHead -> str);
 
 	/*run an all action - check for error in actions and if not error update the IC counter,*/
 	/*in data, string, extern, entry insert if we need to lists (if we need)*/
 	if((strcmp(ItemHead-> str, STR_STRING)) == 0){
 		if(ItemHead->next ==NULL)
 		{
-			printf("error: %s not get string\n",ItemHead-> str);
+			printf("[Error] not getting %s string\n",ItemHead-> str);
 			return EXIT_FAILURE;
 		}
 		/*if we need to update symbols list*/
@@ -273,8 +273,8 @@ int RunFirstReadAction(firstReadStruct * firstRead, CommandItemNode * ItemHead, 
 		updateICandLabelFromAction(firstRead, Lable,1);
 	}
 
-	printf("log: FirstTransition : IC: %d\n", firstRead ->IC);
-	printf("log: FirstTransition : DC: %d\n", firstRead ->DC);
+	printf("[Info] IC: %d\n", firstRead ->IC);
+	printf("[Info] DC: %d\n", firstRead ->DC);
 
 	return EXIT_SUCCESS;
 }
@@ -359,7 +359,7 @@ int CheckIfSourceAddressingOk(char * str, char * action){
 		ADDERSSING ad = ChooseAddressType(str);
 		if(ad == IMMEDIATEADDERSSING || ad  == DIRECTREGISTERADDERSSING||
 				ad == RANDOMADDERSSING2 || ad == RANDOMADDERSSING1){
-			printf("error wrong parameter source - %s : %s", action, str);
+			printf("[Error] wrong parameter source - %s : %s", action, str);
 			return EXIT_FAILURE;
 		}
 	}
@@ -383,7 +383,7 @@ int CheckIfDestenationAddressingOk(char * str, char * action){
 			strcmp(action, STRJSR)== 0 ){
 		if(ad == IMMEDIATEADDERSSING || ad  == RANDOMADDERSSING1||
 				ad == RANDOMADDERSSING2 || ad == RANDOMADDERSSING3 ){
-			printf("error wrong parameter source - %s : %s", action, str);
+			printf("[Error] wrong parameter source - %s : %s", action, str);
 			return EXIT_FAILURE;
 		}
 	}
@@ -391,7 +391,7 @@ int CheckIfDestenationAddressingOk(char * str, char * action){
 	if(strcmp(action, STRCMP)== 0 ||
 			strcmp(action, STRPRN)== 0 ){
 		if(ad  == RANDOMADDERSSING1|| ad == RANDOMADDERSSING2 || ad == RANDOMADDERSSING3 ){
-			printf("error wrong parameter source - %s : %s", action, str);
+			printf("[Error] wrong parameter source - %s : %s", action, str);
 			return EXIT_FAILURE;
 		}
 	}
@@ -401,7 +401,7 @@ int CheckIfDestenationAddressingOk(char * str, char * action){
 int CheckIfWeHaveTwoOperators(CommandItemNode * ItemNode){
 	/*check if we have 2 param*/
 	if(ItemNode == NULL || ItemNode->next == NULL ){
-		printf("error not get 2 parameters - %s", ItemNode-> str);
+		printf("[Error] not get 2 parameters - %s", ItemNode-> str);
 		return EXIT_FAILURE;
 	}
 
@@ -427,7 +427,7 @@ void updateICandLabelFromAction(firstReadStruct * firstRead,  symbolsListNode *L
 int CheckIfWeHaveOneOperators(CommandItemNode * ItemNode){
 	/*check if we get 1 param*/
 	if(ItemNode == NULL){
-		printf("error not get 1 parameters - %s", ItemNode-> str);
+		printf("[Error] not get 1 parameters - %s", ItemNode-> str);
 		return EXIT_FAILURE;
 	}
 	return EXIT_SUCCESS;

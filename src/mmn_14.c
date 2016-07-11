@@ -35,18 +35,19 @@ int main(int argc, char *argv[]) {
 		//	strcpy(inputFile,argv[i]);
 		//	strcat(inputFile,".as");
 			commandStringNode * CommandListHead;
-			printf("[Info]: Starting building linked list of %s file\n",argv[i]);
+			printf("[Info]: starting run project of %s file\n",argv[i]);
 			CommandListHead = decodingFile("myprog.as");
 			printLineLinkList(CommandListHead);
-			printf("\n\n");
-			printf("[Info]: Starting first read of %s file\n",argv[i]);
+
+			printf("[Info] Starting first read of %s file\n",argv[i]);
 			/*create the struct for the first transition and give defaults*/
 			firstReadStruct * firstRead = (firstReadStruct *)malloc(sizeof(firstReadStruct));
 			firstRead->DC = 0;
 			firstRead->IC = 100;
 			firstRead->symbolHead = NULL;
 			runFirstRead(CommandListHead,firstRead);
-			printf("[Info]: Starting second read of %s file\n",argv[i]);
+
+			printf("[Info] Starting second read of %s file\n",argv[i]);
 			secondReadStruct* secondRead = ConvertFirstReadToSecondRead(firstRead);
 			free(firstRead);
 

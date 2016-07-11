@@ -12,7 +12,7 @@
 #include "assembler.h"
 
 /*convert the input file *.as  to linked list of commands
-in each line we have link list of commands */
+in each line in text that converted we have link list of commands */
 
 commandStringNode * decodingFile (char* fileName) {
 	FILE *file;
@@ -24,11 +24,11 @@ commandStringNode * decodingFile (char* fileName) {
 	/* Open File */
 	if (file == NULL)
 	{
-		printf("[file-manager][Error] Can't open the file %s\n",fileName);
+		printf("[Error] Can't open the file %s\n",fileName);
 		return FALSE;
 	}
 	else
-		printf("[file-manager][Info] Successfully opened the file %s\n",fileName);
+		printf("[Info] Successfully opened the file %s\n",fileName);
 	while(fgets(line,MAX_DATA_NUM,file)!= NULL) {
 		int index = strlen(line);
 		buff = malloc(index);
@@ -48,7 +48,7 @@ commandStringNode * decodingFile (char* fileName) {
 commandStringNode * ConvertLineToLinkList (char* line) {
 	CommandItemNode * head = NULL;
 	char * token;
-	char * emptyChar = " ,\t\n";  /*chars needed to be skiped*/
+	char * emptyChar = " ,\t\n";   /*chars needed to be skipped*/
 	token = strtok(line, emptyChar);
 	while(token !=NULL) {
 		CommandItemNode * node = (CommandItemNode *)malloc(sizeof(CommandItemNode));
@@ -81,7 +81,7 @@ commandStringNode * InsertItemToStringList(commandStringNode * HeadList, Command
 	NodeTmp -> next->prev =  NodeTmp;
 	return HeadList;
 }
-/*copies the  string s into a newly allocated string*/
+/*copies the  string  into a new allocated string*/
 
 char *strdup(const char *str)
 {
@@ -124,4 +124,5 @@ void printLineLinkList(commandStringNode * LineList) {
 		LineListTmp = (commandStringNode *)LineListTmp -> next;
 		printf("\n");
 	}
+	printf("[Info] finished printing linked-list.\n");
 }
