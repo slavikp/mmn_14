@@ -34,8 +34,6 @@
 #define MEMORY_WORD_LENGTH	15
 #define MAX_REGISTER_DIGIT	7
 #define FILE_NAME_MAX       4096
-
-/* Defining Constants */
 #define MAX_LINES_NUM		700
 #define MAX_LABELS_NUM		0
 
@@ -89,30 +87,34 @@ typedef struct symbolsListNode{
 
 #define STRING_COMMENT  ";"
 #define STRING_LABEL    ":"
+
 /*Guidance Statements*/
 #define STR_STRING      ".string"
-#define STRDATA ".data"
-#define STRENTRY ".entry"
-#define STREXTERN ".extern"
-/*Action Statements -1*/
-#define STRMOV "mov"
-#define STRCMP "cmp"
-#define STRADD "add"
-#define STRSUB "sub"
-#define STRLEA "lea"
-/*Action Statements -2*/
-#define STRNOT "not"
-#define STRCLR "clr"
-#define STRINC "inc"
-#define STRDEC "dec"
-#define STRJMP "jmp"
-#define STRBNE "bne"
-#define STRRED "red"
-#define STRPRN "prn"
-#define STRJSR "jsr"
-/*Action Statements -3*/
-#define STRRTS "rts"
-#define STRSTOP "stop"
+#define STR_DATA 		".data"
+#define STR_ENTRY 		".entry"
+#define STR_EXTERN 		".extern"
+
+/*opCodes divided to 3 group according to num of operands*/
+/*Action Statements #1: 2 operand needed*/
+#define STR_MOV "mov"
+#define STR_CMP "cmp"
+#define STR_ADD "add"
+#define STR_SUB "sub"
+#define STR_LEA "lea"
+/*Action Statements 21: 1 operand needed*/
+#define STR_NOT "not"
+#define STR_CLR "clr"
+#define STR_INC "inc"
+#define STR_DEC "dec"
+#define STR_JMP "jmp"
+#define STR_BNE "bne"
+#define STR_RED "red"
+#define STR_PRN "prn"
+#define STR_JSR "jsr"
+/*Action Statements 21: no operand needed*/
+#define STR_RTS "rts"
+#define STR_STOP "stop"
+
 #define INPUTFILENAME "prog1.ob"
 #define EXTFILENAME "prog1.ext"
 #define ENTFILENAME "prog1.ent"
@@ -138,14 +140,7 @@ typedef struct symbolsListNode{
 #define ACTIONSTOP 15
 
 
-typedef enum {
-	IMMEDIATEADDERSSING, DIRECTADDERSSING,
-	RANDOMADDERSSING1,RANDOMADDERSSING2,
-	RANDOMADDERSSING3, DIRECTREGISTERADDERSSING
-} ADDERSSING;
-
-typedef enum {
-	REGISTER, LABLE, NUMBER
-}PARAMETERTYPE;
+typedef enum {IMMEDIATEADDERSSING, DIRECTADDERSSING, RANDOMADDERSSING1,RANDOMADDERSSING2,RANDOMADDERSSING3, DIRECTREGISTERADDERSSING } ADDERSSING;
+typedef enum {REGISTER, LABLE, NUMBER}PARAMETERTYPE;
 
 #endif /* ASSEMBLER_H */

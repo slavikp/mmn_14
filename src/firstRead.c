@@ -76,9 +76,9 @@ int UpdateFirstReadStruct(firstReadStruct * firstRead, CommandItemNode * ItemHea
 			/*insert to symbols list*/
 			AddSymbolToSymbolsList(firstRead, Lable);
 			return EXIT_SUCCESS;
-		}else{
-			return EXIT_FAILURE;
 		}
+		else
+			return EXIT_FAILURE;
 	}
 
 	/*Action Statements*/
@@ -114,7 +114,7 @@ int RunFirstReadAction(firstReadStruct * firstRead, CommandItemNode * ItemHead, 
 		AddRowToDataList(firstRead, endStr);
 		return EXIT_SUCCESS;
 
-	}else if(strcmp(ItemHead-> str, STRDATA)== 0){
+	}else if(strcmp(ItemHead-> str, STR_DATA)== 0){
 		/*get next data int*/
 		CommandItemNode *tmp =  (CommandItemNode *)ItemHead->next;
 		/*if we have label before action and if we have one int or more*/
@@ -125,10 +125,10 @@ int RunFirstReadAction(firstReadStruct * firstRead, CommandItemNode * ItemHead, 
 			AddRowToDataList(firstRead, convertIntCharToUnsignedInt(tmp-> str));
 			tmp=(CommandItemNode *)tmp->next;
 		}
-	}else if(strcmp(ItemHead-> str, STRENTRY)== 0){
-		/*Nothing first Run*/
+	}else if(strcmp(ItemHead-> str, STR_ENTRY)== 0){
+		/*Do nothing in first Run*/
 
-	}else if(strcmp(ItemHead-> str, STREXTERN)== 0){
+	}else if(strcmp(ItemHead-> str, STR_EXTERN)== 0){
 		/*create symbol to extract and add to symbols list*/
 		symbolsListNode* Symbol = (symbolsListNode*)malloc(sizeof(symbolsListNode));
 		Symbol->Label = (char*)((CommandItemNode *)ItemHead->next)-> str;
@@ -138,10 +138,10 @@ int RunFirstReadAction(firstReadStruct * firstRead, CommandItemNode * ItemHead, 
 		Symbol->next = NULL;
 		AddSymbolToSymbolsList(firstRead, Symbol);
 
-	}else if(strcmp(ItemHead-> str, STRMOV)== 0){
+	}else if(strcmp(ItemHead-> str, STR_MOV)== 0){
 		if(CheckIfWeHaveTwoOperators((CommandItemNode *)ItemHead->next) == EXIT_FAILURE ||
-				CheckIfSourceAddressingOk(((CommandItemNode *)ItemHead->next)-> str, STRMOV) == EXIT_FAILURE
-				|| CheckIfDestenationAddressingOk( ((CommandItemNode *)((CommandItemNode *)ItemHead->next)->next)-> str , STRMOV) == EXIT_FAILURE){
+				CheckIfSourceAddressingOk(((CommandItemNode *)ItemHead->next)-> str, STR_MOV) == EXIT_FAILURE
+				|| CheckIfDestenationAddressingOk( ((CommandItemNode *)((CommandItemNode *)ItemHead->next)->next)-> str , STR_MOV) == EXIT_FAILURE){
 			return EXIT_FAILURE;
 		}
 		int rows = 3;
@@ -149,12 +149,12 @@ int RunFirstReadAction(firstReadStruct * firstRead, CommandItemNode * ItemHead, 
 		if(IfBothParamRegister((CommandItemNode *)ItemHead->next,(CommandItemNode *)((CommandItemNode *)ItemHead->next)->next )==0){
 			rows--;
 		}
-		updateICandLabelFromAction(firstRead, Lable,rows);
+		updateIC(firstRead, Lable,rows);
 
-	}else if(strcmp(ItemHead-> str, STRCMP)== 0){
+	}else if(strcmp(ItemHead-> str, STR_CMP)== 0){
 		if(CheckIfWeHaveTwoOperators((CommandItemNode *)ItemHead->next) == EXIT_FAILURE ||
-				CheckIfSourceAddressingOk(((CommandItemNode *)ItemHead->next)-> str, STRCMP) == EXIT_FAILURE
-				|| CheckIfDestenationAddressingOk( ((CommandItemNode *)((CommandItemNode *)ItemHead->next)->next)-> str , STRCMP) == EXIT_FAILURE){
+				CheckIfSourceAddressingOk(((CommandItemNode *)ItemHead->next)-> str, STR_CMP) == EXIT_FAILURE
+				|| CheckIfDestenationAddressingOk( ((CommandItemNode *)((CommandItemNode *)ItemHead->next)->next)-> str , STR_CMP) == EXIT_FAILURE){
 			return EXIT_FAILURE;
 		}
 		int rows = 3;
@@ -162,12 +162,12 @@ int RunFirstReadAction(firstReadStruct * firstRead, CommandItemNode * ItemHead, 
 		if(IfBothParamRegister((CommandItemNode *)ItemHead->next,(CommandItemNode *)((CommandItemNode *)ItemHead->next)->next )==0){
 			rows--;
 		}
-		updateICandLabelFromAction(firstRead, Lable,rows);
+		updateIC(firstRead, Lable,rows);
 
-	}else if(strcmp(ItemHead-> str, STRADD)== 0){
+	}else if(strcmp(ItemHead-> str, STR_ADD)== 0){
 		if(CheckIfWeHaveTwoOperators((CommandItemNode *)ItemHead->next) == EXIT_FAILURE ||
-				CheckIfSourceAddressingOk(((CommandItemNode *)ItemHead->next)-> str, STRADD) == EXIT_FAILURE
-				|| CheckIfDestenationAddressingOk( ((CommandItemNode *)((CommandItemNode *)ItemHead->next)->next)-> str , STRADD) == EXIT_FAILURE){
+				CheckIfSourceAddressingOk(((CommandItemNode *)ItemHead->next)-> str, STR_ADD) == EXIT_FAILURE
+				|| CheckIfDestenationAddressingOk( ((CommandItemNode *)((CommandItemNode *)ItemHead->next)->next)-> str , STR_ADD) == EXIT_FAILURE){
 			return EXIT_FAILURE;
 		}
 		int rows = 3;
@@ -175,12 +175,12 @@ int RunFirstReadAction(firstReadStruct * firstRead, CommandItemNode * ItemHead, 
 		if(IfBothParamRegister((CommandItemNode *)ItemHead->next,(CommandItemNode *)((CommandItemNode *)ItemHead->next)->next )==0){
 			rows--;
 		}
-		updateICandLabelFromAction(firstRead, Lable,rows);
+		updateIC(firstRead, Lable,rows);
 
-	}else if(strcmp(ItemHead-> str, STRSUB)== 0){
+	}else if(strcmp(ItemHead-> str, STR_SUB)== 0){
 		if(CheckIfWeHaveTwoOperators((CommandItemNode *)ItemHead->next) == EXIT_FAILURE ||
-				CheckIfSourceAddressingOk(((CommandItemNode *)ItemHead->next)-> str, STRSUB) == EXIT_FAILURE
-				|| CheckIfDestenationAddressingOk( ((CommandItemNode *)((CommandItemNode *)ItemHead->next)->next)-> str , STRSUB) == EXIT_FAILURE){
+				CheckIfSourceAddressingOk(((CommandItemNode *)ItemHead->next)-> str, STR_SUB) == EXIT_FAILURE
+				|| CheckIfDestenationAddressingOk( ((CommandItemNode *)((CommandItemNode *)ItemHead->next)->next)-> str , STR_SUB) == EXIT_FAILURE){
 			return EXIT_FAILURE;
 		}
 		int rows = 3;
@@ -188,12 +188,12 @@ int RunFirstReadAction(firstReadStruct * firstRead, CommandItemNode * ItemHead, 
 		if(IfBothParamRegister((CommandItemNode *)ItemHead->next,(CommandItemNode *)((CommandItemNode *)ItemHead->next)->next )==0){
 			rows--;
 		}
-		updateICandLabelFromAction(firstRead, Lable,rows);
+		updateIC(firstRead, Lable,rows);
 
-	}else if(strcmp(ItemHead-> str, STRLEA)== 0){
+	}else if(strcmp(ItemHead-> str, STR_LEA)== 0){
 		if(CheckIfWeHaveTwoOperators((CommandItemNode *)ItemHead->next) == EXIT_FAILURE ||
-				CheckIfSourceAddressingOk(((CommandItemNode *)ItemHead->next)-> str, STRLEA) == EXIT_FAILURE
-				|| CheckIfDestenationAddressingOk( ((CommandItemNode *)((CommandItemNode *)ItemHead->next)->next)-> str , STRLEA) == EXIT_FAILURE){
+				CheckIfSourceAddressingOk(((CommandItemNode *)ItemHead->next)-> str, STR_LEA) == EXIT_FAILURE
+				|| CheckIfDestenationAddressingOk( ((CommandItemNode *)((CommandItemNode *)ItemHead->next)->next)-> str , STR_LEA) == EXIT_FAILURE){
 			return EXIT_FAILURE;
 		}
 		int rows = 3;
@@ -201,76 +201,76 @@ int RunFirstReadAction(firstReadStruct * firstRead, CommandItemNode * ItemHead, 
 		if(IfBothParamRegister((CommandItemNode *)ItemHead->next,(CommandItemNode *)((CommandItemNode *)ItemHead->next)->next )==0){
 			rows--;
 		}
-		updateICandLabelFromAction(firstRead, Lable,rows);
+		updateIC(firstRead, Lable,rows);
 
-	}else if(strcmp(ItemHead-> str, STRNOT)== 0){
+	}else if(strcmp(ItemHead-> str, STR_NOT)== 0){
 		if(CheckIfWeHaveOneOperators((CommandItemNode *)ItemHead->next) == EXIT_FAILURE ||
-				CheckIfDestenationAddressingOk( ((CommandItemNode *)ItemHead->next)-> str , STRNOT) == EXIT_FAILURE){
+				CheckIfDestenationAddressingOk( ((CommandItemNode *)ItemHead->next)-> str , STR_NOT) == EXIT_FAILURE){
 			return EXIT_FAILURE;
 		}
 
-		updateICandLabelFromAction(firstRead, Lable,2);
+		updateIC(firstRead, Lable,2);
 
-	}else if(strcmp(ItemHead-> str, STRCLR)== 0){
+	}else if(strcmp(ItemHead-> str, STR_CLR)== 0){
 		if(CheckIfWeHaveOneOperators((CommandItemNode *)ItemHead->next) == EXIT_FAILURE ||
-				CheckIfDestenationAddressingOk( ((CommandItemNode *)ItemHead->next)-> str , STRCLR) == EXIT_FAILURE){
+				CheckIfDestenationAddressingOk( ((CommandItemNode *)ItemHead->next)-> str , STR_CLR) == EXIT_FAILURE){
 			return EXIT_FAILURE;
 		}
-		updateICandLabelFromAction(firstRead, Lable,2);
+		updateIC(firstRead, Lable,2);
 
-	}else if(strcmp(ItemHead-> str, STRINC)== 0){
+	}else if(strcmp(ItemHead-> str, STR_INC)== 0){
 		if(CheckIfWeHaveOneOperators((CommandItemNode *)ItemHead->next) == EXIT_FAILURE ||
-				CheckIfDestenationAddressingOk( ((CommandItemNode *)ItemHead->next)-> str , STRINC) == EXIT_FAILURE){
+				CheckIfDestenationAddressingOk( ((CommandItemNode *)ItemHead->next)-> str , STR_INC) == EXIT_FAILURE){
 			return EXIT_FAILURE;
 		}
-		updateICandLabelFromAction(firstRead, Lable,2);
+		updateIC(firstRead, Lable,2);
 
-	}else if(strcmp(ItemHead-> str, STRDEC)== 0){
+	}else if(strcmp(ItemHead-> str, STR_DEC)== 0){
 		if(CheckIfWeHaveOneOperators((CommandItemNode *)ItemHead->next) == EXIT_FAILURE ||
-				CheckIfDestenationAddressingOk( ((CommandItemNode *)ItemHead->next)-> str , STRDEC) == EXIT_FAILURE){
+				CheckIfDestenationAddressingOk( ((CommandItemNode *)ItemHead->next)-> str , STR_DEC) == EXIT_FAILURE){
 			return EXIT_FAILURE;
 		}
-		updateICandLabelFromAction(firstRead, Lable,2);
+		updateIC(firstRead, Lable,2);
 
-	}else if(strcmp(ItemHead-> str, STRJMP)== 0){
+	}else if(strcmp(ItemHead-> str, STR_JMP)== 0){
 		if(CheckIfWeHaveOneOperators((CommandItemNode *)ItemHead->next) == EXIT_FAILURE ||
-				CheckIfDestenationAddressingOk( ((CommandItemNode *)ItemHead->next)-> str , STRJMP) == EXIT_FAILURE){
+				CheckIfDestenationAddressingOk( ((CommandItemNode *)ItemHead->next)-> str , STR_JMP) == EXIT_FAILURE){
 			return EXIT_FAILURE;
 		}
-		updateICandLabelFromAction(firstRead, Lable,2);
+		updateIC(firstRead, Lable,2);
 
-	}else if(strcmp(ItemHead-> str, STRBNE)== 0){
+	}else if(strcmp(ItemHead-> str, STR_BNE)== 0){
 		if(CheckIfWeHaveOneOperators((CommandItemNode *)ItemHead->next) == EXIT_FAILURE ||
-				CheckIfDestenationAddressingOk( ((CommandItemNode *)ItemHead->next)-> str , STRBNE) == EXIT_FAILURE){
+				CheckIfDestenationAddressingOk( ((CommandItemNode *)ItemHead->next)-> str , STR_BNE) == EXIT_FAILURE){
 			return EXIT_FAILURE;
 		}
-		updateICandLabelFromAction(firstRead, Lable,2);
+		updateIC(firstRead, Lable,2);
 
-	}else if(strcmp(ItemHead-> str, STRRED)== 0){
+	}else if(strcmp(ItemHead-> str, STR_RED)== 0){
 		if(CheckIfWeHaveOneOperators((CommandItemNode *)ItemHead->next) == EXIT_FAILURE ||
-				CheckIfDestenationAddressingOk( ((CommandItemNode *)ItemHead->next)-> str , STRRED) == EXIT_FAILURE){
+				CheckIfDestenationAddressingOk( ((CommandItemNode *)ItemHead->next)-> str , STR_RED) == EXIT_FAILURE){
 			return EXIT_FAILURE;
 		}
-		updateICandLabelFromAction(firstRead, Lable,2);
+		updateIC(firstRead, Lable,2);
 
-	}else if(strcmp(ItemHead-> str, STRPRN)== 0){
+	}else if(strcmp(ItemHead-> str, STR_PRN)== 0){
 		if(CheckIfWeHaveOneOperators((CommandItemNode *)ItemHead->next) == EXIT_FAILURE ||
-				CheckIfDestenationAddressingOk( ((CommandItemNode *)ItemHead->next)-> str , STRPRN) == EXIT_FAILURE){
+				CheckIfDestenationAddressingOk( ((CommandItemNode *)ItemHead->next)-> str , STR_PRN) == EXIT_FAILURE){
 			return EXIT_FAILURE;
 		}
-		updateICandLabelFromAction(firstRead, Lable,2);
+		updateIC(firstRead, Lable,2);
 
-	}else if(strcmp(ItemHead-> str, STRJSR)== 0){
+	}else if(strcmp(ItemHead-> str, STR_JSR)== 0){
 		if(CheckIfWeHaveOneOperators((CommandItemNode *)ItemHead->next) == EXIT_FAILURE ||
-				CheckIfDestenationAddressingOk( ((CommandItemNode *)ItemHead->next)-> str , STRJSR) == EXIT_FAILURE){
+				CheckIfDestenationAddressingOk( ((CommandItemNode *)ItemHead->next)-> str , STR_JSR) == EXIT_FAILURE){
 			return EXIT_FAILURE;
 		}
-		updateICandLabelFromAction(firstRead, Lable,2);
+		updateIC(firstRead, Lable,2);
 
-	}else if(strcmp(ItemHead-> str, STRRTS)== 0){
-		updateICandLabelFromAction(firstRead, Lable,1);
-	}else if(strcmp(ItemHead-> str, STRSTOP)== 0){
-		updateICandLabelFromAction(firstRead, Lable,1);
+	}else if(strcmp(ItemHead-> str, STR_RTS)== 0){
+		updateIC(firstRead, Lable,1);
+	}else if(strcmp(ItemHead-> str, STR_STOP)== 0){
+		updateIC(firstRead, Lable,1);
 	}
 
 	printf("[Info] IC: %d\n", firstRead ->IC);
@@ -279,9 +279,7 @@ int RunFirstReadAction(firstReadStruct * firstRead, CommandItemNode * ItemHead, 
 	return EXIT_SUCCESS;
 }
 
-
-
-
+/*function check if the label is one of the register name*/
 int IsRegisterString(char*str){
 	if(strncmp(str, "R" ,1) == 0){
 		switch(str[1]){
@@ -303,7 +301,7 @@ int IsRegisterString(char*str){
 			return 0;
 		}
 	}
-	return 1;
+	return TRUE;
 }
 
 void AddSymbolToSymbolsList(firstReadStruct * firstRead, symbolsListNode *symbol){
@@ -355,7 +353,7 @@ Data* convertIntCharToUnsignedInt(char * Char){
 
 int CheckIfSourceAddressingOk(char * str, char * action){
 	/*check if the source address not correct*/
-	if(strcmp(action, STRLEA)== 0){
+	if(strcmp(action, STR_LEA)== 0){
 		ADDERSSING ad = ChooseAddressType(str);
 		if(ad == IMMEDIATEADDERSSING || ad  == DIRECTREGISTERADDERSSING||
 				ad == RANDOMADDERSSING2 || ad == RANDOMADDERSSING1){
@@ -369,18 +367,18 @@ int CheckIfSourceAddressingOk(char * str, char * action){
 int CheckIfDestenationAddressingOk(char * str, char * action){
 	/*check if the destination address not correct*/
 	ADDERSSING ad = ChooseAddressType(str);
-	if(strcmp(action, STRMOV)== 0 ||
-			strcmp(action, STRADD)== 0 ||
-			strcmp(action, STRSUB)== 0 ||
-			strcmp(action, STRNOT)== 0 ||
-			strcmp(action, STRCLR)== 0 ||
-			strcmp(action, STRLEA)== 0 ||
-			strcmp(action, STRINC)== 0 ||
-			strcmp(action, STRDEC)== 0||
-			strcmp(action, STRJMP)== 0 ||
-			strcmp(action, STRBNE)== 0 ||
-			strcmp(action, STRRED)== 0 ||
-			strcmp(action, STRJSR)== 0 ){
+	if(strcmp(action, STR_MOV)== 0 ||
+			strcmp(action, STR_ADD)== 0 ||
+			strcmp(action, STR_SUB)== 0 ||
+			strcmp(action, STR_NOT)== 0 ||
+			strcmp(action, STR_CLR)== 0 ||
+			strcmp(action, STR_LEA)== 0 ||
+			strcmp(action, STR_INC)== 0 ||
+			strcmp(action, STR_DEC)== 0||
+			strcmp(action, STR_JMP)== 0 ||
+			strcmp(action, STR_BNE)== 0 ||
+			strcmp(action, STR_RED)== 0 ||
+			strcmp(action, STR_JSR)== 0 ){
 		if(ad == IMMEDIATEADDERSSING || ad  == RANDOMADDERSSING1||
 				ad == RANDOMADDERSSING2 || ad == RANDOMADDERSSING3 ){
 			printf("[Error] wrong parameter source - %s : %s", action, str);
@@ -388,8 +386,8 @@ int CheckIfDestenationAddressingOk(char * str, char * action){
 		}
 	}
 
-	if(strcmp(action, STRCMP)== 0 ||
-			strcmp(action, STRPRN)== 0 ){
+	if(strcmp(action, STR_CMP)== 0 ||
+			strcmp(action, STR_PRN)== 0 ){
 		if(ad  == RANDOMADDERSSING1|| ad == RANDOMADDERSSING2 || ad == RANDOMADDERSSING3 ){
 			printf("[Error] wrong parameter source - %s : %s", action, str);
 			return EXIT_FAILURE;
@@ -401,7 +399,7 @@ int CheckIfDestenationAddressingOk(char * str, char * action){
 int CheckIfWeHaveTwoOperators(CommandItemNode * ItemNode){
 	/*check if we have 2 param*/
 	if(ItemNode == NULL || ItemNode->next == NULL ){
-		printf("[Error] not get 2 parameters - %s", ItemNode-> str);
+		printf("[Error] Do not have two operators - %s", ItemNode-> str);
 		return EXIT_FAILURE;
 	}
 
@@ -414,7 +412,7 @@ int IfBothParamRegister(CommandItemNode * ItemNodeS, CommandItemNode * ItemNodeD
 	return 1;
 }
 
-void updateICandLabelFromAction(firstReadStruct * firstRead,  symbolsListNode *Lable, int rows){
+void updateIC(firstReadStruct * firstRead,  symbolsListNode *Lable, int rows){
 	/*in first transition update the counter of transitions IC*/
 	/*if we have label to the row we update that we in action line and update the address of action index*/
 	if(Lable != NULL){
@@ -427,7 +425,7 @@ void updateICandLabelFromAction(firstReadStruct * firstRead,  symbolsListNode *L
 int CheckIfWeHaveOneOperators(CommandItemNode * ItemNode){
 	/*check if we get 1 param*/
 	if(ItemNode == NULL){
-		printf("[Error] not get 1 parameters - %s", ItemNode-> str);
+		printf("[Error] Do not have one operators - %s", ItemNode-> str);
 		return EXIT_FAILURE;
 	}
 	return EXIT_SUCCESS;

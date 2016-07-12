@@ -86,9 +86,9 @@ void RunSecondReadAction(secondReadStruct * secondRead, CommandItemNode * ItemHe
 	printf("[Info] action: %s\n", ItemHead ->str);
 	if((strcmp(ItemHead->str, STR_STRING)) == 0){
 		/*do nothing*/
-	}else if(strcmp(ItemHead->str, STRDATA)== 0){
+	}else if(strcmp(ItemHead->str, STR_DATA)== 0){
 		/*do nothing*/
-	}else if(strcmp(ItemHead->str, STRENTRY)== 0){
+	}else if(strcmp(ItemHead->str, STR_ENTRY)== 0){
 		/*if entry*/
 		int bool = 0;
 		/*find the entry in symbols list*/
@@ -111,10 +111,10 @@ void RunSecondReadAction(secondReadStruct * secondRead, CommandItemNode * ItemHe
 			WritingLineToFile(ENTFILENAME , str);
 			WritingLineToFile(ENTFILENAME , "\n");
 		}
-	}else if(strcmp(ItemHead->str, STREXTERN)== 0){
+	}else if(strcmp(ItemHead->str, STR_EXTERN)== 0){
 		/*Nothing second Run*/
 
-	}else if(strcmp(ItemHead->str, STRMOV)== 0){
+	}else if(strcmp(ItemHead->str, STR_MOV)== 0){
 		/*for every action do the same action*/
 		/*get the source if we need*/
 		/*get the destination if we need*/
@@ -129,7 +129,7 @@ void RunSecondReadAction(secondReadStruct * secondRead, CommandItemNode * ItemHe
 
 
 		/*build the action for the action*/
-		buildAction(secondRead,(CommandItemNode *)ItemHead->next, 2, ACTIONMOV,STRMOV);
+		buildAction(secondRead,(CommandItemNode *)ItemHead->next, 2, ACTIONMOV,STR_MOV);
 
 		/*convert source to bytes (Data contains bytes)*/
 		ConvertParamToData('s',secondRead,datas, datad, s);
@@ -144,7 +144,7 @@ void RunSecondReadAction(secondReadStruct * secondRead, CommandItemNode * ItemHe
 			/*add destination Data (Bytes) to tranistion*/
 			AddRowToTransitionList(secondRead, datad);
 		}
-	}else if(strcmp(ItemHead->str, STRCMP)== 0){
+	}else if(strcmp(ItemHead->str, STR_CMP)== 0){
 		CommandItemNode * s = (CommandItemNode *)ItemHead->next;
 		CommandItemNode * d = (CommandItemNode *)s->next;
 
@@ -154,7 +154,7 @@ void RunSecondReadAction(secondReadStruct * secondRead, CommandItemNode * ItemHe
 		Data* datad = (Data*)malloc(sizeof(Data));
 		datad->bytes = 0;
 
-		buildAction(secondRead,(CommandItemNode *)ItemHead->next, 2, ACTIONCMP,STRCMP);
+		buildAction(secondRead,(CommandItemNode *)ItemHead->next, 2, ACTIONCMP,STR_CMP);
 
 		ConvertParamToData('s',secondRead,datas, datad, s);
 		AddRowToTransitionList(secondRead, datas);
@@ -167,7 +167,7 @@ void RunSecondReadAction(secondReadStruct * secondRead, CommandItemNode * ItemHe
 			AddRowToTransitionList(secondRead, datad);
 		}
 
-	}else if(strcmp(ItemHead->str, STRADD)== 0){
+	}else if(strcmp(ItemHead->str, STR_ADD)== 0){
 		CommandItemNode * s = (CommandItemNode *)ItemHead->next;
 		CommandItemNode * d = (CommandItemNode *)s->next;
 
@@ -177,7 +177,7 @@ void RunSecondReadAction(secondReadStruct * secondRead, CommandItemNode * ItemHe
 		Data* datad = (Data*)malloc(sizeof(Data));
 		datad->bytes = 0;
 
-		buildAction(secondRead,(CommandItemNode *)ItemHead->next, 2, ACTIONADD,STRADD);
+		buildAction(secondRead,(CommandItemNode *)ItemHead->next, 2, ACTIONADD,STR_ADD);
 
 		ConvertParamToData('s',secondRead,datas, datad, s);
 		AddRowToTransitionList(secondRead, datas);
@@ -190,7 +190,7 @@ void RunSecondReadAction(secondReadStruct * secondRead, CommandItemNode * ItemHe
 			AddRowToTransitionList(secondRead, datad);
 		}
 
-	}else if(strcmp(ItemHead->str, STRSUB)== 0){
+	}else if(strcmp(ItemHead->str, STR_SUB)== 0){
 		CommandItemNode * s = (CommandItemNode *)ItemHead->next;
 		CommandItemNode * d = (CommandItemNode *)s->next;
 
@@ -200,7 +200,7 @@ void RunSecondReadAction(secondReadStruct * secondRead, CommandItemNode * ItemHe
 		Data* datad = (Data*)malloc(sizeof(Data));
 		datad->bytes = 0;
 
-		buildAction(secondRead,(CommandItemNode *)ItemHead->next, 2, ACTIONSUB,STRSUB);
+		buildAction(secondRead,(CommandItemNode *)ItemHead->next, 2, ACTIONSUB,STR_SUB);
 
 		ConvertParamToData('s',secondRead,datas, datad, s);
 		AddRowToTransitionList(secondRead, datas);
@@ -213,7 +213,7 @@ void RunSecondReadAction(secondReadStruct * secondRead, CommandItemNode * ItemHe
 			AddRowToTransitionList(secondRead, datad);
 		}
 
-	}else if(strcmp(ItemHead->str, STRLEA)== 0){
+	}else if(strcmp(ItemHead->str, STR_LEA)== 0){
 		CommandItemNode * s = (CommandItemNode *)ItemHead->next;
 		CommandItemNode * d = (CommandItemNode *)s->next;
 
@@ -223,7 +223,7 @@ void RunSecondReadAction(secondReadStruct * secondRead, CommandItemNode * ItemHe
 		Data* datad = (Data*)malloc(sizeof(Data));
 		datad->bytes = 0;
 
-		buildAction(secondRead,(CommandItemNode *)ItemHead->next, 2, ACTIONLEA,STRLEA);
+		buildAction(secondRead,(CommandItemNode *)ItemHead->next, 2, ACTIONLEA,STR_LEA);
 
 		ConvertParamToData('s',secondRead,datas, datad, s);
 		AddRowToTransitionList(secondRead, datas);
@@ -236,120 +236,120 @@ void RunSecondReadAction(secondReadStruct * secondRead, CommandItemNode * ItemHe
 			(secondRead, datad);
 		}
 
-	}else if(strcmp(ItemHead->str, STRNOT)== 0){
+	}else if(strcmp(ItemHead->str, STR_NOT)== 0){
 
 		CommandItemNode * d = (CommandItemNode *)ItemHead->next;
 
 		Data* datad = (Data*)malloc(sizeof(Data));
 		datad->bytes = 0;
 
-		buildAction(secondRead,(CommandItemNode *)ItemHead->next, 1, ACTIONNOT,STRNOT);
+		buildAction(secondRead,(CommandItemNode *)ItemHead->next, 1, ACTIONNOT,STR_NOT);
 
 		ConvertParamToData('d',secondRead,datad, NULL, d);
 		AddRowToTransitionList(secondRead, datad);
 
-	}else if(strcmp(ItemHead->str, STRCLR)== 0){
+	}else if(strcmp(ItemHead->str, STR_CLR)== 0){
 
 		CommandItemNode * d = (CommandItemNode *)ItemHead->next;
 
 		Data* datad = (Data*)malloc(sizeof(Data));
 		datad->bytes = 0;
 
-		buildAction(secondRead,(CommandItemNode *)ItemHead->next, 1, ACTIONCLR,STRCLR);
+		buildAction(secondRead,(CommandItemNode *)ItemHead->next, 1, ACTIONCLR,STR_CLR);
 
 		ConvertParamToData('d',secondRead,datad, NULL, d);
 		AddRowToTransitionList(secondRead, datad);
 
-	}else if(strcmp(ItemHead->str, STRINC)== 0){
+	}else if(strcmp(ItemHead->str, STR_INC)== 0){
 
 		CommandItemNode * d = (CommandItemNode *)ItemHead->next;
 
 		Data* datad = (Data*)malloc(sizeof(Data));
 		datad->bytes = 0;
 
-		buildAction(secondRead,(CommandItemNode *)ItemHead->next, 1, ACTIONINC,STRINC);
+		buildAction(secondRead,(CommandItemNode *)ItemHead->next, 1, ACTIONINC,STR_INC);
 
 		ConvertParamToData('d',secondRead,datad, NULL, d);
 		AddRowToTransitionList(secondRead, datad);
 
-	}else if(strcmp(ItemHead->str, STRDEC)== 0){
+	}else if(strcmp(ItemHead->str, STR_DEC)== 0){
 
 		CommandItemNode * d = (CommandItemNode *)ItemHead->next;
 
 		Data* datad = (Data*)malloc(sizeof(Data));
 		datad->bytes = 0;
 
-		buildAction(secondRead,(CommandItemNode *)ItemHead->next, 1, ACTIONDEC,STRDEC);
+		buildAction(secondRead,(CommandItemNode *)ItemHead->next, 1, ACTIONDEC,STR_DEC);
 
 		ConvertParamToData('d',secondRead,datad, NULL, d);
 		AddRowToTransitionList(secondRead, datad);
 
-	}else if(strcmp(ItemHead->str, STRJMP)== 0){
+	}else if(strcmp(ItemHead->str, STR_JMP)== 0){
 
 		CommandItemNode * d = (CommandItemNode *)ItemHead->next;
 
 		Data* datad = (Data*)malloc(sizeof(Data));
 		datad->bytes = 0;
 
-		buildAction(secondRead,(CommandItemNode *)ItemHead->next, 1, ACTIONJMP,STRJMP);
+		buildAction(secondRead,(CommandItemNode *)ItemHead->next, 1, ACTIONJMP,STR_JMP);
 
 		ConvertParamToData('d',secondRead,datad, NULL, d);
 		(secondRead, datad);
 
-	}else if(strcmp(ItemHead->str, STRBNE)== 0){
+	}else if(strcmp(ItemHead->str, STR_BNE)== 0){
 
 		CommandItemNode * d = (CommandItemNode *)ItemHead->next;
 
 		Data* datad = (Data*)malloc(sizeof(Data));
 		datad->bytes = 0;
 
-		buildAction(secondRead,(CommandItemNode *)ItemHead->next, 1, ACTIONBNE,STRBNE);
+		buildAction(secondRead,(CommandItemNode *)ItemHead->next, 1, ACTIONBNE,STR_BNE);
 
 		ConvertParamToData('d',secondRead,datad, NULL, d);
 		AddRowToTransitionList(secondRead, datad);
 
-	}else if(strcmp(ItemHead->str, STRRED)== 0){
+	}else if(strcmp(ItemHead->str, STR_RED)== 0){
 
 		CommandItemNode * d = (CommandItemNode *)ItemHead->next;
 
 		Data* datad = (Data*)malloc(sizeof(Data));
 		datad->bytes = 0;
 
-		buildAction(secondRead,(CommandItemNode *)ItemHead->next, 1, ACTIONRED,STRRED);
+		buildAction(secondRead,(CommandItemNode *)ItemHead->next, 1, ACTIONRED,STR_RED);
 
 		ConvertParamToData('d',secondRead,datad, NULL, d);
 		AddRowToTransitionList(secondRead, datad);
 
-	}else if(strcmp(ItemHead->str, STRPRN)== 0){
+	}else if(strcmp(ItemHead->str, STR_PRN)== 0){
 
 		CommandItemNode * d = (CommandItemNode *)ItemHead->next;
 
 		Data* datad = (Data*)malloc(sizeof(Data));
 		datad->bytes = 0;
 
-		buildAction(secondRead,(CommandItemNode *)ItemHead->next, 1, ACTIONPRN,STRPRN);
+		buildAction(secondRead,(CommandItemNode *)ItemHead->next, 1, ACTIONPRN,STR_PRN);
 
 		ConvertParamToData('d',secondRead,datad, NULL, d);
 		AddRowToTransitionList(secondRead, datad);
 
-	}else if(strcmp(ItemHead->str, STRJSR)== 0){
+	}else if(strcmp(ItemHead->str, STR_JSR)== 0){
 
 		CommandItemNode * d = (CommandItemNode *)ItemHead->next;
 
 		Data* datad = (Data*)malloc(sizeof(Data));
 		datad->bytes = 0;
 
-		buildAction(secondRead,(CommandItemNode *)ItemHead->next, 1, ACTIONJSR,STRJSR);
+		buildAction(secondRead,(CommandItemNode *)ItemHead->next, 1, ACTIONJSR,STR_JSR);
 
 		ConvertParamToData('d',secondRead,datad, NULL, d);
 		AddRowToTransitionList(secondRead, datad);
 
-	}else if(strcmp(ItemHead->str, STRRTS)== 0){
+	}else if(strcmp(ItemHead->str, STR_RTS)== 0){
 
-		buildAction(secondRead,(CommandItemNode *)ItemHead->next, 0, ACTIONRTS,STRRTS);
+		buildAction(secondRead,(CommandItemNode *)ItemHead->next, 0, ACTIONRTS,STR_RTS);
 
-	}else if(strcmp(ItemHead->str, STRSTOP)== 0){
-		buildAction(secondRead,(CommandItemNode *)ItemHead->next, 0, ACTIONSTOP,STRSTOP);
+	}else if(strcmp(ItemHead->str, STR_STOP)== 0){
+		buildAction(secondRead,(CommandItemNode *)ItemHead->next, 0, ACTIONSTOP,STR_STOP);
 	}
 
 

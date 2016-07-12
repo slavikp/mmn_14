@@ -26,7 +26,7 @@ int CheckIfSourceAddressingOk(char * str, char * action);
 int CheckIfDestenationAddressingOk(char * str, char * action);
 int CheckIfWeHaveTwoOperators(CommandItemNode * ItemNode);
 int IfBothParamRegister(CommandItemNode * ItemNodeS, CommandItemNode * ItemNodeD);
-void updateICandLabelFromAction(firstReadStruct * firstRead,  symbolsListNode *Lable, int rows);
+void updateIC(firstReadStruct * firstRead,  symbolsListNode *Lable, int rows);
 int CheckIfWeHaveOneOperators(CommandItemNode * ItemNode);
 ADDERSSING ChooseAddressType(char * str);
 
